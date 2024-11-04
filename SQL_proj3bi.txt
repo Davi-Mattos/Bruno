@@ -1,0 +1,27 @@
+CREATE TABLE `consultas`.`pacientes` (
+  `CPF` INT(11) NOT NULL,
+  `nomepaciente` VARCHAR(45) NULL,
+  `historicomedico` VARCHAR(100) NULL,
+  PRIMARY KEY (`CPF`));
+
+CREATE TABLE `consultas`.`medicos` (
+  `CRM` INT(7) NOT NULL,
+  `nomemedico` VARCHAR(45) NULL,
+  `especialidade` VARCHAR(20) NULL,
+  PRIMARY KEY (`CRM`));
+
+
+Projeto 4: Sistema de Gerenciamento de Consultas
+M ́edicas
+Descri ̧c ̃ao: Criar um sistema de gerenciamento de consultas m ́edicas que permita o
+cadastro de pacientes, m ́edicos e agendamento de consultas. O sistema deve realizar
+opera ̧c ̃oes CRUD sobre esses registros.
+Funcionalidades:
+• Cadastro de pacientes (nome, CPF, contato, hist ́orico m ́edico, etc.)
+• Cadastro de m ́edicos (nome, CRM, especialidade, etc.)
+• Agendamento de consultas (paciente, m ́edico, data, hora, etc.)
+• Consulta de pacientes, m ́edicos e agendamentos
+• Atualiza ̧c ̃ao de informa ̧c ̃oes de pacientes, m ́edicos e agendamentos
+• Remo ̧c ̃ao de registros de pacientes, m ́edicos e agendamentos
+
+faça com SQL e Pyton
