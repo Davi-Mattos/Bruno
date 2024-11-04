@@ -1,0 +1,11 @@
+CREATE TABLE `consultas`.`pacientes` (
+  `CPF` INT(11) NOT NULL,
+  `nomepaciente` VARCHAR(45) NULL,
+  `historicomedico` VARCHAR(100) NULL,
+  PRIMARY KEY (`CPF`));
+
+CREATE TABLE `consultas`.`medicos` (
+  `CRM` INT(7) NOT NULL,
+  `nomemedico` VARCHAR(45) NULL,
+  `especialidade` VARCHAR(20) NULL,
+  PRIMARY KEY (`CRM`));
