@@ -1,0 +1,199 @@
+import mysql.connector
+from mysql.connector import Error
+
+def connect_to_db():
+    """Establish connection to the database."""
+    return mysql.connector.connect(
+        host='localhost',
+        user='your_username',
+        password='your_password',
+        database='consultas'
+    )
+
+def create_patient(cpf, nome, contato, historico):
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        sql = "INSERT INTO pacientes (CPF, nomepaciente, contato, historicomedico) VALUES (%s, %s, %s, %s)"
+        values = (cpf, nome, contato, historico)
+        cursor.execute(sql, values)
+        conn.commit()
+        print("Patient created successfully.")
+       except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def read_patient(cpf):
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        sql = "SELECT * FROM pacientes WHERE CPF = %s"
+        cursor.execute(sql, (cpf,))
+        result = cursor.fetchone()
+        if result:
+            print("Patient Details:", result)
+        else:
+            print("No patient found with this CPF.")
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def update_patient(cpf, nome=None, contato=None, historico=None):
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        updates = []
+        values = []
+        if nome:
+            updates.append("nomepaciente = %s")
+            values.append(nome)
+        if contato:
+            updates.append("contato = %s")
+            values.append(contato)
+        if historico:
+            updates.append("historicomedico = %s")
+            values.append(historico)
+        values.append(cpf)
+        
+        if updates:
+            sql = "UPDATE pacientes SET " + ", ".join(updates) + " WHERE CPF = %s"
+            cursor.execute(sql, values)
+            conn.commit()
+            print("Patient updated successfully.")
+        else:
+            print("No updates provided.")
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_patient(cpf):
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        sql = "DELETE FROM pacientes WHERE CPF = %s"
+        cursor.execute(sql, (cpf,))
+        conn.commit()
+        if cursor.rowcount:
+            print("Patient deleted successfully.")
+        else:
+            print("No patient found with this CPF.")
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def create_appointment(cpf, crm, data, hora):
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        sql = "INSERT INTO agendamentos (CPF, CRM, data, hora) VALUES (%s, %s, %s, %s)"
+        values = (cpf, crm, data, hora)
+        cursor.execute(sql, values)
+        conn.commit()
+        print("Appointment created successfully.")
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def read_appointments():
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        sql = "SELECT * FROM agendamentos"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        if results:
+            for row in results:
+                print(row)
+        else:
+            print("No appointments found.")
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def update_appointment(id, cpf=None, crm=None, data=None, hora=None):
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        updates = []
+        values = []
+        if cpf:
+            updates.append("CPF = %s")
+            values.append(cpf)
+        if crm:
+            updates.append("CRM = %s")
+            values.append(crm)
+        if data:
+            updates.append("data = %s")
+            values.append(data)
+        if hora:
+            updates.append("hora = %s")
+            values.append(hora)
+        values.append(id)
+        
+        if updates:
+            sql = "UPDATE agendamentos SET " + ", ".join(updates) + " WHERE id = %s"
+            cursor.execute(sql, values)
+            conn.commit()
+            print("Appointment updated successfully.")
+        else:
+            print("No updates provided.")
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_appointment(id):
+    try:
+        conn = connect_to_db()
+        cursor = conn.cursor()
+        sql = "DELETE FROM agendamentos WHERE id = %s"
+        cursor.execute(sql, (id,))
+        conn.commit()
+        if cursor.rowcount:
+            print("Appointment deleted successfully.")
+        else:
+            print("No appointment found with this ID.")
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+# Example usage
+if __name__ == "__main__":
+    # Add a new patient
+    create_patient("12345678900", "João Silva", "999999999", "Nenhum histórico.")
+
+    # Update patient info
+    update_patient("12345678900", nome="João Silva Filho")
+
+    # Read patient info
+    read_patient("12345678900")
+
+    # Delete patient
+    delete_patient("12345678900")
+
+    # Create an appointment
+    create_appointment("12345678900", "1234567", "2024-09-07", "09:00:00")
+
+    # Read all appointments
+    read_appointments()
+
+    # Update appointment
+    update_appointment(1, hora="10:00:00")
+
+    # Delete appointment
+    delete_appointment(1)
